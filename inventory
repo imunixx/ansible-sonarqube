@@ -1,0 +1,11 @@
+all:
+  children:
+    sonarqube:
+      hosts:
+        sonar.dev.klackwerk.de:
+    postgresql:
+      hosts:
+        sonar.dev.klackwerk.de:
+    nginx:
+      hosts:
+        sonar.dev.klackwerk.de:

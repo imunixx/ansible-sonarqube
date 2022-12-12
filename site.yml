@@ -1,0 +1,17 @@
+- hosts: all
+  roles:
+    - role: common
+    - role: ufw
+
+- hosts: postgresql
+  roles:
+    - role: postgresql
+
+- hosts: sonarqube
+  roles:
+    - role: sonarqube
+
+- hosts: nginx
+  roles:
+    - role: nginx
+    - role: nginx-vhost

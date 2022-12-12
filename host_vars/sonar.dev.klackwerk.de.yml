@@ -1,0 +1,81 @@
+sonar_ssl_cert_path: /etc/letsencrypt/live/sonar.dev.klackwerk.de/fullchain.pem
+sonar_ssl_key_path: /etc/letsencrypt/live/sonar.dev.klackwerk.de/privkey.pem
+
+sonar_version: 9.7.1.62043
+sonar_db_embedded: false
+
+# SonarQube JDBC Credentials
+sonar_db_user: "sonarqube_dev"
+sonar_db_pass: "{{ vault_sonarqube_dev_password}}"
+sonar_db_name: "sonarqube_dev"
+sonar_jdbc_url: 'jdbc:postgresql://localhost/{{ sonar_db_name}}'
+
+#sonar_ldap:
+#  authenticator_downcase: false
+#  url: 'ldap://ldap.forumsys.com'
+#  bind_dn: 'cn=read-only-admin,dc=example,dc=com'
+#  bind_password: 'password'
+#  user_base_dn: 'dc=example,dc=com'
+#  authentication: simple
+#  realm: 'example.com'
+#  context_factory_class: com.sun.jndi.ldap.LdapCtxFactory
+#  start_tls: false
+#  follow_referrals: true
+#  user_request: '(&(objectClass=person)(uid=riemann))'
+#  user_real_name_attribute: 'cn'
+#  user_email_attribute: 'mail'
+#  group_base_dn: 'o=groups,o=example,o=com'
+#  group_request: '(&(objectClass=groupOfNames)(member={dn}))'
+#  group_id_attribute: 'sAMAccountName'
+
+
+# Host based authentication (hba) entries to be added to the pg_hba.conf. This
+# variable's defaults reflect the defaults that come with a fresh installation.
+postgresql_hba_entries:
+  - {type: local, database: all, user: postgres, auth_method: peer}
+  - {type: local, database: all, user: all, auth_method: peer}
+  - {type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: "{{ postgresql_auth_method }}"}
+  - {type: host, database: all, user: all, address: '::1/128', auth_method: "{{ postgresql_auth_method }}"}
+
+# Debian only. Used to generate the locales used by PostgreSQL databases.
+postgresql_locales:
+  - 'en_US.UTF-8'
+
+# Databases to ensure exist.
+postgresql_databases:
+  - name: sonarqube_dev
+
+# Users to ensure exist.
+postgresql_users:
+  - name: sonarqube_dev
+    password: "{{ vault_sonarqube_dev_password }}"
+
+nginx_vhosts:
+  - fqdn: sonar.dev.klackwerk.de
+    vHost: 'templates/nginx/sonar.j2'
+
+ufw_default_incoming_policy: deny
+ufw_default_outgoing_policy: allow
+ufw_logging: 'off'
+
+ufw_rules:
+  - rule: allow
+    interface: "{{ ansible_default_ipv4['interface'] }}"
+    to_port: 22
+    protocol: tcp
+  - rule: allow
+    interface: "{{ ansible_default_ipv4['interface'] }}"
+    to_port: 443
+    protocol: tcp
+  - rule: allow
+    interface: "{{ ansible_default_ipv4['interface'] }}"
+    to_port: 80
+    protocol: tcp
+
+vault_sonarqube_dev_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          62356263343137656238363430653833333261303565333035356534623033336562346133353532
+          6363643863663463303933316136633865616639666461350a376261633264396238323465313039
+          37333034373130393532396530363633636430306130623566313632643036333263633139336566
+          6162656235626563340a633763633865363932386133643634346635396461663538333830613438
+          64333637396239356330623835346232306334376163386261386431333432393761

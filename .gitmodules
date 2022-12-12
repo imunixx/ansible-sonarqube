@@ -1,0 +1,12 @@
+[submodule "roles/sonarqube"]
+	path = roles/sonarqube
+	url = https://github.com/KornKalle/ansible-role-sonarqube.git
+[submodule "roles/postgresql"]
+	path = roles/postgresql
+	url = https://github.com/KornKalle/ansible-role-postgresql.git
+[submodule "roles/nginx-vhost"]
+	path = roles/nginx-vhost
+	url = https://github.com/KornKalle/ansible-nginx-vhost.git
+[submodule "roles/nginx"]
+	path = roles/nginx
+	url = https://github.com/KornKalle/ansible-nginx.git
