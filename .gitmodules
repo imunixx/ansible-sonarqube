@@ -1,6 +1,6 @@
 [submodule "roles/sonarqube"]
 	path = roles/sonarqube
-	url = https://github.com/KornKalle/ansible-role-sonarqube.git
+	url = https://github.com/imunixx/ansible-role-sonarqube.git
 [submodule "roles/postgresql"]
 	path = roles/postgresql
 	url = https://github.com/KornKalle/ansible-role-postgresql.git
